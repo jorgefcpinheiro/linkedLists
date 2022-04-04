@@ -55,12 +55,13 @@ STATUS SaveLine(LIST list, const char* filename);
 STATUS ReadLine(LIST* list, const char* filename);
 void AddEstacao(LIST* list);
 void RemoveEstacao(LIST* list);
+float Custo(LIST list, char* origem, char* destino);
 
 int main()
 {
 	LIST linha1 = NULL, linha2 = NULL, linha3 = NULL, linha4 = NULL, linha5 = NULL, linha = NULL;
-	ESTACAO* ptr = NULL;
-	char str[20];
+	ESTACAO* ptr = NULL, *orig = NULL, *dest = NULL;
+	char str[20], origem[30], destino[30];
 	int est=0,aux=0;
 	void* pt = NULL;
 
@@ -81,7 +82,7 @@ int main()
 
 			printf("Insere o nome da estação\n >> ");
 			while ((getchar()) != '\n');
-			gets_s(str, 30);
+			gets(str);
 
 			/*printf("Insere a linha\n >>>");
 			scanf("%d", &est);
@@ -133,10 +134,26 @@ int main()
 
 		case 4: //Guardar linhas 
 
-
-
+			if((SaveLine(linha1,"Linha1_.txt") == OK)
+				&& (SaveLine(linha2,"Linha2_.txt") == OK)
+				&& (SaveLine(linha3,"Linha3_.txt") == OK)
+				&& (SaveLine(linha4,"Linha4_.txt") == OK)
+				&& (SaveLine(linha5,"Linha5_.txt") == OK))
+			{
+				printf("Linhas guardadas com sucesso\n");
+			}
 			break;
-		case 5:
+		case 5: //Calcular custo da viagem
+
+			linha = ChosList(linha1, linha2, linha3, linha4, linha5);
+
+			printf("Insere a estação de origem\n >> ");
+			scanf("%s",origem);
+			printf("Insere s estação de destino\n >> ");
+			scanf("%s", destino);
+
+			printf("Custo = %.1f euros", Custo(linha, origem, destino));
+
 			break;
 		default:
 			printf("Opção inválida");
@@ -276,7 +293,30 @@ void ShowValues(LIST list)
 
 STATUS SaveLine(LIST list, const char* filename)
 {
-	return STATUS();
+	FILE* fp = NULL;
+	ESTACAO* pt = NULL;
+	int ativa=0, no=0;
+	
+	if ((fp = fopen(filename, "w")) != NULL)
+	{
+		while (list != NULL) 
+		{
+			pt = (ESTACAO*)DATA(list);
+			if (pt->ativa) ativa = 1;
+			if (pt->no) no = 1;
+			fprintf(fp,"%c;%.1f;%d;%d;\n", pt->desig,pt->custo,ativa,no);
+			list = NEXT(list);
+		}
+		fclose(fp);
+		printf("Linha salva com sucesso\n");
+		return OK;
+	}
+	else {
+		fclose(fp);
+		printf("ERRO\n");
+		return ERROR;
+	}
+	
 }
 
 STATUS ReadLine(LIST* list, const char* filename)
@@ -297,7 +337,6 @@ STATUS ReadLine(LIST* list, const char* filename)
 					pt->ativa = TRUE;
 				if (no)
 					pt->no = TRUE;
-				//InsertIni(list, pt);
 			}
 			else
 			{
@@ -341,7 +380,7 @@ void RemoveEstacao(LIST* list)
 	printf("\n\n\n");
 	printf("Designação da estação: ");
 	while ((getchar()) != '\n');
-	gets_s(str, 30);
+	gets(str);
 
 	if ((ptr = FindStationName(*list, str)) != NULL)
 		RemoveNode(list, ptr);
@@ -349,6 +388,32 @@ void RemoveEstacao(LIST* list)
 		printf("Estação inexistente\n");
 
 	//ShowValues(*list);
+}
+
+float Custo(LIST list, char* origem, char* destino)
+{
+	bool flag=0;
+	float custo = 0;
+
+	while (list != NULL)
+	{
+		if (flag)
+		{
+			if (!strcmp(((ESTACAO*)DATA(list))->desig,destino)) {
+				return custo;
+			}
+			else custo = custo + ((ESTACAO*)DATA(list))->custo;
+		}
+		
+		if (!strcmp(((ESTACAO*)DATA(list))->desig,origem))
+		{
+			flag = 1;
+			custo = custo + ((ESTACAO*)DATA(list))->custo;
+		}
+
+		list = NEXT(list);
+	}
+	return -1;
 }
 
 STATUS RemoveNode(LIST* list, void* data)
