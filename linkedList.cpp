@@ -424,7 +424,7 @@ STATUS RemoveNode(LIST* list, void* data)
 	{
 		if (temp->data == data) {
 			if (temp = *list)   *list = (*list)->next;
-			else                ant->next = temp->next;
+			else ant->next = temp->next;
 
 			free(temp->data);
 			free(temp);
