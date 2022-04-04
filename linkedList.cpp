@@ -62,7 +62,7 @@ int main()
 	printf("\n");
 	ptr_aluno = (ALUNO *)malloc(sizeof(ALUNO));
 	printf("Introduza o nome do aluno: ");
-	flushall();
+	//flushall();
 	gets(ptr_aluno->nome);
 	printf("Introduza a idade do aluno: ");
 	scanf("%d", &(ptr_aluno->idade));
