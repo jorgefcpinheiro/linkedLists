@@ -41,18 +41,6 @@ LIST_NODE *InsertIni(LIST *list, void *data){
     return(new_node);
 }
 
-STATUS ReadFile(LIST *,char *);
-
-int main(int argc, char *argv[])
-{
-    LIST list;
-    PLAYER player;
-    if(!ReadFile(&list,"selecao.txt"))
-    return 0;
-    FreeList(&list);
-    return 1;
-}
-
 STATUS ReadFile(LIST *list, char *name_file)
 {
     FILE *fp;
@@ -77,3 +65,55 @@ STATUS ReadFile(LIST *list, char *name_file)
     else
         return ERROR;
 }
+
+void FreeList(LIST* list){
+    LIST_NODE *node;
+    while(list != NULL){
+        node=NEXT(*list);
+        free(DATA(*list));
+        free(*list);
+        *list = node;
+    }
+}
+
+STATUS addPlayer(LIST* list){
+    PLAYER *pl = NULL;
+    int titular = 0;
+    if (((pl = (PLAYER*)malloc(sizeof(PLAYER))) != NULL) && (InsertIni(list,pl)==OK)){
+        printf("name>>"); scanf("%s", pl->nome);
+        printf("club>>"); scanf("%s", pl->clube);
+        printf("position>>"); scanf("%s", pl->posicao);
+        printf("starting eleven? (1 - yes // 0 - no) >>"); scanf("%d", &titular);
+        switch(titular){
+            case 0:
+                pl->titular = TRUE;
+                break;
+            case 1:
+                pl->titular = FALSE;
+                break;
+            default:
+                printf("invalid option!");
+                break;
+        }
+    }
+}
+
+void showEleven (LIST *list){
+    while (list != NULL){
+        if (((PLAYER*)DATA(*list))->titular == TRUE){
+            printf("%s | %s | %s",((PLAYER*)DATA(*list))->clube, ((PLAYER*)DATA(*list))->posicao, ((PLAYER*)DATA(*list))->nome);
+            *list = NEXT(*list);
+        }
+    }
+}
+
+int main(int argc, char *argv[])
+{
+    LIST list;
+    PLAYER player;
+    if(!ReadFile(&list,"selecao.txt"))
+    return 0;
+    FreeList(&list);
+    return 1;
+}
+
