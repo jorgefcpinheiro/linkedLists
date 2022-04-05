@@ -69,5 +69,12 @@ int ListSize(LIST list){
     return count;
 }
 void ShowValues(LIST list){
-    
+    if (emptyList(list) == TRUE) {
+        printf("a lista esta vazia!");
+        return;
+    }
+    while(list != NULL){
+        printf("ALUNO: %s, IDADE: %d\n", ((ALUNO *)DATA(list))->nome,((ALUNO *)DATA(list))->idade);
+        list=NEXT(list);
+    }
 }
