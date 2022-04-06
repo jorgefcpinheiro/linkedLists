@@ -32,13 +32,16 @@ LIST_NODE *NewNode(void *data){
     return(new_node);
 }
 
-LIST_NODE *InsertIni(LIST *list, void *data){
-    LIST_NODE *new_node;
-    if((new_node = NewNode(data)) != NULL) {
-        NEXT(new_node) = *list;
-        *list = new_node;
-    }
-    return(new_node);
+STATUS InsertIni(LIST* list, void* data)
+{
+	LIST_NODE* new_node;
+	if ((new_node = NewNode(data)) != NULL)
+	{
+		NEXT(new_node) = *list;
+		*list = new_node;
+		return OK;
+	}
+	return ERROR;
 }
 
 STATUS ReadFile(LIST *list, char *name_file)
@@ -77,25 +80,24 @@ void FreeList(LIST* list){
 }
 
 STATUS addPlayer(LIST* list){
-    PLAYER *pl = NULL;
-    int titular = 0;
-    if (((pl = (PLAYER*)malloc(sizeof(PLAYER))) != NULL) && (InsertIni(list,pl)==OK)){
-        printf("name>>"); scanf("%s", pl->nome);
-        printf("club>>"); scanf("%s", pl->clube);
-        printf("position>>"); scanf("%s", pl->posicao);
-        printf("starting eleven? (1 - yes // 0 - no) >>"); scanf("%d", &titular);
-        switch(titular){
-            case 0:
-                pl->titular = TRUE;
-                break;
-            case 1:
-                pl->titular = FALSE;
-                break;
-            default:
-                printf("invalid option!");
-                break;
-        }
-    }
+	PLAYER* pt=NULL;
+	int titular = 0;
+
+	if (((pt = (PLAYER*)malloc(sizeof(PLAYER))) != NULL) && (InsertIni(list,pt)==OK))
+	{
+		printf("Nome >> ");
+		scanf("%s", pt->nome);
+		printf("Club >> ");
+		scanf("%s", pt->clube);
+		printf("Posicao >> ");
+		scanf("%d", &(pt->posicao));
+		printf("Titular >> ");
+		scanf("%d", &titular);
+		if (titular == 1)
+			pt->titular = TRUE;
+		else
+			pt->titular = FALSE;
+	}
 }
 
 void showEleven (LIST *list){
@@ -103,6 +105,24 @@ void showEleven (LIST *list){
         if (((PLAYER*)DATA(*list))->titular == TRUE){
             printf("%s | %s | %s",((PLAYER*)DATA(*list))->clube, ((PLAYER*)DATA(*list))->posicao, ((PLAYER*)DATA(*list))->nome);
             *list = NEXT(*list);
+        }
+    }
+}
+
+void subPlayer(LIST* list){
+    char plOut[MAX_NOME];
+    char plIn[MAX_NOME];
+    LIST_NODE *temp = *list;
+    printf("name player in >>"); scanf("%s", plIn);
+    printf("name player out >>"); scanf("%s", plOut);
+    while(temp != NULL){
+        if(((PLAYER*)DATA(*list))->nome == plIn) {
+            if (((PLAYER*)DATA(*list))->titular = FALSE) ((PLAYER*)DATA(*list))->titular = TRUE; 
+            else printf("the player is already in");
+        if(((PLAYER*)DATA(*list))->nome == plOut) 
+            if(((PLAYER*)DATA(*list))->titular = TRUE) ((PLAYER*)DATA(*list))->titular = FALSE;
+            else printf("the player is already out");
+        temp=NEXT(temp); 
         }
     }
 }
