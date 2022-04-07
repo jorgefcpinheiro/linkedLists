@@ -508,3 +508,13 @@ ESTACAO* FindStationName(LIST list, char* str)
 	return NULL;
 	
 }
+
+float calculaPreco(LIST list, char *ini, char *end){
+	float custo = 0;
+	while (strcmp(((ESTACAO*)list->data)->desig,ini)) list = NEXT(list);
+	while (strcmp(((ESTACAO*)list->data)->desig,end)){
+		custo += ((ESTACAO*)list->data)->custo;
+		list = NEXT(list);
+	}
+	return custo;
+}
