@@ -518,3 +518,20 @@ float calculaPreco(LIST list, char *ini, char *end){
 	}
 	return custo;
 }
+
+LIST_NODE* existe (LIST list, char * str){
+	while (list != NULL){
+		if (!strcmp(str, ((ESTACAO*)DATA(list))->desig))return list;
+		list = NEXT(list);
+	}
+	return NULL;
+}
+
+BOOLEAN viagemValida (LIST list, char *ini, char *end){
+	LIST_NODE * node = NULL;
+	if ( (node = existe(list,ini)) != NULL)
+	{
+		if (existe(node, end) != NULL) return TRUE;
+	}
+	return FALSE;
+}
