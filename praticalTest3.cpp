@@ -88,8 +88,8 @@ void addPhone (LIST *list){
     printf("model>>"); scanf("%s", modelo);
     printf("price>>"); scanf("%f", &preco);
     printf("stock>>"); scanf("%d", &stock);
-    ((SMARTPHONE*)temp)->marca = marca;
-    ((SMARTPHONE*)temp)->modelo = modelo;
+    //((SMARTPHONE*)temp)->marca = marca;
+    //((SMARTPHONE*)temp)->modelo = modelo;
     ((SMARTPHONE*)temp)->preco = preco;
     ((SMARTPHONE*)temp)->stock = stock;
     InsertIni(list, temp);
