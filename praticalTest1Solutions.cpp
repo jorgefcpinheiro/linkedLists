@@ -25,6 +25,7 @@ typedef struct _LIST_NODE
 	void* data;
 	struct _LIST_NODE* next;
 } LIST_NODE;
+
 typedef LIST_NODE* LIST;
 
 LIST_NODE* NewNode(void*);
