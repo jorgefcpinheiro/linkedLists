@@ -93,6 +93,7 @@ void addPhone (LIST *list){
     ((SMARTPHONE*)temp)->preco = preco;
     ((SMARTPHONE*)temp)->stock = stock;
     InsertIni(list, temp);
+    printf("phone added!");
 }
 
 void allPrices (LIST *list){
